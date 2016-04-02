@@ -33,5 +33,53 @@ Difficulty : Medium
 
 int * find_sequences(int *arr, int len){
 	//Return final array which has 6indexes [AP1_S,AP1_E,AP2_S,AP2_E,GP1_S,GP2_E]
-	return NULL;
+	if (arr == NULL || len<=3)
+		return NULL;
+	
+	int *result = (int*) malloc(6 * sizeof(int));
+	result[0] = 0; result[1] = 0; result[2] = 0; result[3] = 0; result[4] = 0; result[5] = 0;
+	float div = (arr[1] / (1.0*arr[0]));
+	int dif = (arr[1] - arr[0]), gs = 0, as = 0;
+
+	for (int iter = 2; iter < len; iter++){
+		//arithmetic sequences
+		if ((result[3] == 0) && ((arr[iter] - arr[iter - 1]) != dif)){
+			if (iter - as >= 3){
+				if (result[1] == 0){
+					result[0] = as;
+					result[1] = iter - 1;
+					dif = arr[iter] - arr[iter - 1];
+					as = iter - 1;
+				}
+				else{
+					result[2] = as;
+					result[3] = iter - 1;
+				}
+			}
+			else{
+				dif = arr[iter] - arr[iter - 1];
+				as = iter - 1;
+			}
+		}
+		else if (result[3] == 0 && (iter == len -1)){
+			result[2] = as;
+			result[3] = iter;
+		}
+		//geometric sequence
+		if (result[5] == 0 && ((arr[iter] / (1.0*arr[iter - 1])) != div)){
+			if (iter - gs >= 3){
+				result[4] = gs;
+				result[5] = iter - 1;
+			}
+			else{
+				div = arr[iter] / (1.0*arr[iter - 1]);
+				gs = iter - 1;
+			}
+		}
+		else if (result[5] == 0 && (iter == len - 1)){
+			result[4] = gs;
+			result[5] = iter ;
+		}
+	}
+	return result;
 }
