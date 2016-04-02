@@ -79,6 +79,6 @@ int merge_circularlists(struct node **head1, struct node **head2){
 	
 	h1 = *head1, h2 = *head2;
 	merge->next = (h1->data > h2->data) ? h2 : h1;
-	return temp;
+	return len;
 	
 }
