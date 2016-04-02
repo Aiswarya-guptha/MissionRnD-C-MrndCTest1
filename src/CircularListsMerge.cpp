@@ -51,5 +51,34 @@ int merge_circularlists(struct node **head1, struct node **head2){
 			len++;
 		return len;
 	}
+	struct node *merge = (h1->data > h2->data) ? h2 : h1;
+	h1 = (h1->data <= h2->data) ? h2 : h1;
+
+	struct node *temp = merge;
+	int len = 0;
+	while ((merge->next != *head1 || merge->next != *head2) && (h1->next != *head1 || h1->next != *head2)){
+		if (merge->next->data > h1->data){
+			//insert the node when small
+			h2 = h1->next;
+			h1->next = merge->next;
+			merge->next = h1;
+			merge = h1;
+			h1 = h2;
+		}
+		else
+			//iter when node is bigger
+			merge = merge->next;
+		len++;
+	}
+	while (merge->next != *head1 || merge->next != *head2)
+		//move to end
+		merge = merge->next;
+	if (h1->next != *head1 || h1->next != *head2)
+		//add rest of nodes in head
+		merge->next = h1;
+	
+	h1 = *head1, h2 = *head2;
+	merge->next = (h1->data > h2->data) ? h2 : h1;
+	return temp;
 	
 }
